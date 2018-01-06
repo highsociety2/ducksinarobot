@@ -3,7 +3,7 @@ import numpy
 class Board:
     def __init__(self):
         # init is a function that runs whenever a new "board" is created
-        self.matrix=numpy.zeros([5,5],dtype=int)
+        self.matrix=numpy.zeros([5, 5], dtype=int)
         #Creating a 5by 5 matrix of 0s
     def startingposition(self):
         #this function puts all the ducks in their proper places
