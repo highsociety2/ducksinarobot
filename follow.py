@@ -212,7 +212,13 @@ class Game:
         return 1
 
     def getRowbotMove(self, player):
-        return 0,1,1,1
+        #Step 1
+        #Calculate all possible moves that both players can make.
+        #The way I think I was gonna do it is 
+        #You're gonna have to go square by square ;-;
+        #This is also gonna take a l o t o f t i m e. Think up of alts
+        #
+        
 
     def play(self):
         human_player = int(input("do you want to be player 1 or 2?"))
