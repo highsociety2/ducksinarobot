@@ -41,6 +41,65 @@ class Board:
 
     def isMoveValid(self, fromRow, fromCol, toRow, toCol, player):
         #TODO implement this
+        # make sure the right player is in the from space
+        if self.matrix[fromRow, fromCol] != player:
+            return False
+        # make sure the space you are going to is empty
+        if self.matrix[toRow,toCol] != 0:
+            return False
+        #detect whether or not the duck is moving diagonally or straight
+        if fromRow == toRow:
+            # it's movin' straight to the side
+            # make sure the spaces in between are empty
+            for col in range(toCol,fromCol, numpy.sign(toCol-fromCol)):
+                if self.matrix[fromRow, col] != 0:
+                    return False
+        elif fromCol == toCol:
+            # it's movin' up
+            # make sure the spaces in between are empty
+            for row in range(toRow,fromRow, numpy.sign(toRow-fromRow)):
+                if self.matrix[row, fromCol] != 0:
+                    return False
+        else:
+            # it's movin' diagonally
+            # is it moving with slope 1
+            if abs((toRow-fromRow)/(toCol-fromCol)) != 1:
+                return False
+            # make sure the spaces in between are empty
+            # up and to the right
+            if toCol-fromCol > 0 and toRow-fromRow > 0:
+                col = fromCol
+                for n in range(fromRow+1,toRow):
+                    col += 1
+                    print(str(n) + ", " + str(col))
+                    if self.matrix[n,col] != 0:
+                        print("1")
+                        return False
+            #down and to the right
+            if toCol-fromCol > 0 and toRow-fromRow < 0:
+                col = fromCol
+                for n in range(toRow, fromRow-1):
+                    col += 1
+                    if self.matrix[n, col] != 0:
+                        print("2")
+                        return False
+            #moving up and left yo duh
+            if fromCol-toCol > 0 and toRow-fromRow > 0:
+                col = fromCol
+                for n in range(fromRow+1, toRow):
+                    col -= 1
+                    if self.matrix[n, col] != 0:
+                        print("3")
+                        return False
+            #movign down and left
+            if fromCol-toCol > 0 and toRow-fromRow < 0:
+                col = fromCol
+                for n in range(toRow, fromRow-1):
+                    col -= 1
+                    if self.matrix[n, col] != 0:
+                        print("4")
+                        return False
+
         return True
 
     def moveDuck(self, fromRow, fromCol, toRow, toCol, player):
@@ -71,6 +130,8 @@ class Game:
             toColumn = int(input("Desired column you want to move that duck to"))
             if self.myBoard.matrix[toRow, toColumn] == 0:
                 possible = True
+            else:
+                print("move was invalid")
         return fromRow, fromColumn, toRow, toColumn
 
     def nextPlayer(self, player):
@@ -79,7 +140,7 @@ class Game:
         return 1
 
     def getRowbotMove(self, player):
-        return 0,1,0,0
+        return 0,1,1,1
 
     def play(self):
         human_player = int(input("do you want to be player 1 or 2?"))
@@ -90,13 +151,16 @@ class Game:
             if current_player == human_player:
                 fromRow, fromColumn, toRow, toColumn = self.getHumanMove(current_player)
             else:
-                fromRow, fromColumn, toRow, toColumn = self.getRowbotMove(current_player)
+                fromRow, fromColumn, toRow, toColumn = self.getHumanMove(current_player)
+                #fromRow, fromColumn, toRow, toColumn = self.getRowbotMove(current_player)
             if not self.myBoard.moveDuck(fromRow, fromColumn, toRow, toColumn, current_player):
                 print("Move was not valid")
             else:
+                print("moved from (" + str(fromRow) + "," + str(fromColumn) + ") to (" + str(toRow) + "," + str(toColumn) + ")")
                 current_player = self.nextPlayer(current_player)
                 self.myBoard.print()
-
+    def checkWin(self):
+        return 1
 
 myGame = Game()
 myGame.play()
